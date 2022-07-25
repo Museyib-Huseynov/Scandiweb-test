@@ -1,0 +1,5 @@
+export { default as logo } from './logo.svg'
+export { default as arrowUp } from './arrow-up.svg'
+export { default as arrowDown } from './arrow-down.svg'
+export { default as cart } from './cart.svg'
+export { default as circleIcon } from './circle-icon.svg'

@@ -7,7 +7,16 @@ export class GlobalProvider extends React.Component {
     super(props)
     this.state = {
       category: '',
+      currency: '$',
     }
+  }
+
+  setCategory = (category) => {
+    this.setState({ category })
+  }
+
+  setCurrency = (currency) => {
+    this.setState({ currency })
   }
 
   render() {
@@ -15,6 +24,8 @@ export class GlobalProvider extends React.Component {
       <GlobalContext.Provider
         value={{
           ...this.state,
+          setCategory: this.setCategory,
+          setCurrency: this.setCurrency,
         }}
       >
         {this.props.children}
