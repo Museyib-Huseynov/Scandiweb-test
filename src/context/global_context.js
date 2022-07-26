@@ -8,6 +8,7 @@ export class GlobalProvider extends React.Component {
     this.state = {
       category: '',
       currency: '$',
+      cartProducts: [],
     }
   }
 
@@ -19,6 +20,10 @@ export class GlobalProvider extends React.Component {
     this.setState({ currency })
   }
 
+  setCartProducts = (cartProducts) => {
+    this.setState({ cartProducts })
+  }
+
   render() {
     return (
       <GlobalContext.Provider
@@ -26,6 +31,7 @@ export class GlobalProvider extends React.Component {
           ...this.state,
           setCategory: this.setCategory,
           setCurrency: this.setCurrency,
+          setCartProducts: this.setCartProducts,
         }}
       >
         {this.props.children}

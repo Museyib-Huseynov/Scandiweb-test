@@ -1,2 +1,6 @@
 export { default as Navbar } from './Navbar'
 export { default as PLP } from './PLP'
+export { default as PDP } from './PDP'
+export { default as Cart } from './Cart'
+export { default as ImgGallery } from './ImgGallery'
+export { default as SmallCart } from './SmallCart'

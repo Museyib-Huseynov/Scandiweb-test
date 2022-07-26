@@ -27,6 +27,13 @@ function hooksHOC(Component) {
 }
 
 class PLP extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      addedToCart: false,
+    }
+  }
+
   static contextType = GlobalContext
 
   componentDidMount() {
@@ -37,9 +44,63 @@ class PLP extends React.Component {
     }
   }
 
+  handleAddToCart = (product, cartProducts, setCartProducts) => {
+    const newCartProduct = {
+      product,
+      id: Date.now(),
+      productID: product.id,
+      Size: '',
+      Color: '',
+      Capacity: '',
+      'With USB 3 ports': '',
+      'Touch ID in keyboard': '',
+      amount: 1,
+    }
+
+    product.attributes.map((i) => {
+      newCartProduct[i.name] = i.items[0].value
+      return i
+    })
+
+    if (
+      cartProducts.length === 0 ||
+      !cartProducts.find((i) => i.productID === product.id)
+    ) {
+      cartProducts.push(newCartProduct)
+      setCartProducts(cartProducts)
+      return true
+    } else {
+      let matchedProducts = cartProducts.filter(
+        (i) => i.productID === product.id
+      )
+      outer: for (let i = 0; i < matchedProducts.length; i++) {
+        for (let j = 0; j < product.attributes.length; j++) {
+          if (
+            matchedProducts[i][product.attributes[j].name] !==
+            newCartProduct[product.attributes[j].name]
+          ) {
+            continue outer
+          }
+        }
+        cartProducts = cartProducts.map((item) => {
+          if (item.id === matchedProducts[i].id) {
+            item.amount += 1
+            return item
+          }
+          return item
+        })
+        setCartProducts(cartProducts)
+        return true
+      }
+      cartProducts.push(newCartProduct)
+      setCartProducts(cartProducts)
+      return true
+    }
+  }
+
   render() {
     const { loading, error, data } = this.props.fetchedData
-    const { category, currency } = this.context
+    const { category, currency, cartProducts, setCartProducts } = this.context
 
     if (loading) return null
     if (error) return null
@@ -47,13 +108,13 @@ class PLP extends React.Component {
       <Wrapper>
         <p className='category'>{category}</p>
         <div className='products-container'>
-          {data.category.products?.map((item) => {
+          {data.category?.products?.map((item) => {
             return (
               <div
                 key={item.id}
                 className='single-product-container'
                 onClick={() => {
-                  this.props.navigate(`/${item.id}`)
+                  this.props.navigate(`/product/${item.id}`)
                 }}
               >
                 <img
@@ -66,7 +127,23 @@ class PLP extends React.Component {
                   <img
                     src={circleIcon}
                     alt='Circle Icon'
-                    className='circleIcon'
+                    className={
+                      this.state.addedToCart
+                        ? 'circleIcon circleIcon-clicked'
+                        : 'circleIcon'
+                    }
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      let addedToCart = this.handleAddToCart(
+                        item,
+                        cartProducts,
+                        setCartProducts
+                      )
+                      this.setState({ addedToCart })
+                      setTimeout(() => {
+                        this.setState({ addedToCart: false })
+                      }, 500)
+                    }}
                   />
                 )}
                 <div
@@ -158,6 +235,10 @@ const Wrapper = styled.div`
     bottom: 72px;
     filter: drop-shadow(0px 4px 11px rgba(29, 31, 34, 0.1));
     cursor: pointer;
+  }
+
+  .circleIcon-clicked {
+    filter: drop-shadow(0px 4px 11px green);
   }
 
   .content {
