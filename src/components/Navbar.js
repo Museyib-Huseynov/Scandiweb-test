@@ -27,32 +27,55 @@ class Navbar extends React.Component {
     super(props)
     this.state = {
       currencyArrowOpen: false,
-      smallCartOpen: false,
     }
-    this.ref = React.createRef()
-    this.handleClickOutside = this.handleClickOutside.bind(this)
+    this.refCurrency = React.createRef()
+    this.refCart = React.createRef()
   }
 
   static contextType = GlobalContext
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside)
+    document.addEventListener('mousedown', this.handleClickOutsideCurrency)
+    document.addEventListener('mousedown', this.handleClickOutsideCart)
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside)
+    document.removeEventListener('mousedown', this.handleClickOutsideCurrency)
+    document.removeEventListener('mousedown', this.handleClickOutsideCart)
   }
 
-  handleClickOutside(event) {
-    if (this.ref && !this.ref.current.contains(event.target)) {
+  handleClickOutsideCurrency = (event) => {
+    if (
+      this.state.currencyArrowOpen &&
+      this.refCurrency &&
+      !this.refCurrency.current.contains(event.target)
+    ) {
       this.setState({ currencyArrowOpen: false })
+    }
+  }
+
+  handleClickOutsideCart = (event) => {
+    const { smallCartOpen, setSmallCartOpen } = this.context
+    if (
+      smallCartOpen &&
+      this.refCart &&
+      !this.refCart.current.contains(event.target)
+    ) {
+      setSmallCartOpen()
     }
   }
 
   render() {
     const { loading, error, data } = this.props.fetchedData
-    const { category, setCategory, currency, setCurrency, cartProducts } =
-      this.context
+    const {
+      category,
+      setCategory,
+      currency,
+      setCurrency,
+      cartProducts,
+      smallCartOpen,
+      setSmallCartOpen,
+    } = this.context
 
     const totalAmount = cartProducts.reduce((acc, item) => {
       return acc + item.amount
@@ -101,7 +124,7 @@ class Navbar extends React.Component {
                 currencyArrowOpen: !this.state.currencyArrowOpen,
               })
             }
-            ref={this.ref}
+            ref={this.refCurrency}
           >
             <p className='currency'>{currency}</p>
             <img
@@ -135,18 +158,14 @@ class Navbar extends React.Component {
             </div>
           </div>
 
-          <div className='cart-icon-container'>
-            <div
-              onClick={() =>
-                this.setState({ smallCartOpen: !this.state.smallCartOpen })
-              }
-            >
+          <div className='cart-icon-container' ref={this.refCart}>
+            <div onClick={() => setSmallCartOpen()}>
               <img src={cart} alt='cart' />
               {totalAmount > 0 && (
                 <div className='amounts-circle'>{totalAmount}</div>
               )}
             </div>
-            {this.state.smallCartOpen ? (
+            {smallCartOpen ? (
               <SmallCart
                 navigate={this.props.navigate}
                 closeCart={this.closeCart}
@@ -155,6 +174,7 @@ class Navbar extends React.Component {
           </div>
         </div>
         <Outlet />
+        <div className={smallCartOpen ? 'smallCartOpen' : null}></div>
       </Wrapper>
     )
   }
@@ -166,6 +186,14 @@ const Wrapper = styled.header`
   width: 1440px;
   height: 80px;
   position: relative;
+
+  .smallCartOpen {
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: rgba(57, 55, 72, 0.22);
+    position: absolute;
+    top: 80px;
+  }
 
   .categories-ul {
     list-style-type: none;

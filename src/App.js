@@ -26,4 +26,5 @@ export default App
 const Wrapper = styled.main`
   display: grid;
   justify-items: center;
+  user-select: none;
 `

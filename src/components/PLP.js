@@ -200,7 +200,6 @@ const Wrapper = styled.div`
     align-items: center;
     padding: 16px 0;
     position: relative;
-    /* border: 1px solid blue; */
   }
 
   .single-product-container:hover {
@@ -213,8 +212,7 @@ const Wrapper = styled.div`
   .product-img {
     width: 354px;
     height: 330px;
-    object-fit: contain;
-    /* border: 1px solid red; */
+    object-fit: cover;
   }
 
   .outOfStock {

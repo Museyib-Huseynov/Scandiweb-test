@@ -13,7 +13,6 @@ function hooksHOC(Component) {
     const { loading, error, data } = useQuery(
       GET_SINGLE_PRODUCT(params.productID)
     )
-    console.log(data)
     return (
       <Component
         {...props}

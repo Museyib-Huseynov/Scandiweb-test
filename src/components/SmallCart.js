@@ -6,7 +6,8 @@ class SmallCart extends React.Component {
   static contextType = GlobalContext
 
   render() {
-    const { currency, cartProducts, setCartProducts } = this.context
+    const { currency, cartProducts, setCartProducts, setSmallCartOpen } =
+      this.context
     const totalPrice = cartProducts
       .reduce((acc, item) => {
         const product = item.product
@@ -157,7 +158,7 @@ class SmallCart extends React.Component {
           <button
             className='viewbag'
             onClick={() => {
-              this.props.closeCart()
+              setSmallCartOpen()
               this.props.navigate('/cart')
             }}
           >
@@ -174,17 +175,15 @@ export default SmallCart
 
 const Wrapper = styled.div`
   width: 325px;
-  /* height: 677px; */
   padding: 32px 16px;
-  background: #d0d0d0;
+  background: #fff;
   position: absolute;
-  top: 40px;
+  top: 55px;
   right: -30px;
   z-index: 1000;
 
   .heading {
     width: 100%;
-    /* height: 90px; */
     font-family: 'Raleway';
     font-weight: 700;
     font-size: 16px;
@@ -342,7 +341,7 @@ const Wrapper = styled.div`
   .product-img {
     width: 121px;
     height: 190px;
-    /* object-fit: cover; */
+    object-fit: cover;
   }
 
   .total-price {
