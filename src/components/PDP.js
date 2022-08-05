@@ -54,7 +54,7 @@ class PDP extends React.Component {
 
   handleAddToCart = (product, cartProducts, setCartProducts) => {
     for (let i = 0; i < product.attributes.length; i++) {
-      if (this.state[product.attributes[i].name] === '') {
+      if (!(product.attributes[i].name in this.state)) {
         return false
       }
     }
