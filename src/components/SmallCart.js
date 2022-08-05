@@ -341,7 +341,7 @@ const Wrapper = styled.div`
   .product-img {
     width: 121px;
     height: 190px;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .total-price {

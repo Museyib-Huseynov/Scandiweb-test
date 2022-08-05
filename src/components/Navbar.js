@@ -188,11 +188,12 @@ const Wrapper = styled.header`
   position: relative;
 
   .smallCartOpen {
-    width: 100%;
+    width: 100vw;
     height: calc(100vh - 80px);
     background: rgba(57, 55, 72, 0.22);
     position: absolute;
     top: 80px;
+    left: calc((1440px - 100vw) / 2);
   }
 
   .categories-ul {

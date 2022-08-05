@@ -49,11 +49,6 @@ class PLP extends React.Component {
       product,
       id: Date.now(),
       productID: product.id,
-      Size: '',
-      Color: '',
-      Capacity: '',
-      'With USB 3 ports': '',
-      'Touch ID in keyboard': '',
       amount: 1,
     }
 
@@ -120,7 +115,11 @@ class PLP extends React.Component {
                 <img
                   src={item.gallery[0]}
                   alt={item.name}
-                  className='product-img'
+                  className={
+                    item.inStock
+                      ? 'product-img'
+                      : 'product-img product-img-outofstock'
+                  }
                 />
                 {!item.inStock && <p className='outOfStock'>OUT OF STOCK</p>}
                 {item.inStock && (
@@ -212,7 +211,11 @@ const Wrapper = styled.div`
   .product-img {
     width: 354px;
     height: 330px;
-    object-fit: cover;
+    object-fit: contain;
+  }
+
+  .product-img-outofstock {
+    opacity: 0.5;
   }
 
   .outOfStock {

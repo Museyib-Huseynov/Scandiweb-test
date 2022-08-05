@@ -28,11 +28,6 @@ class PDP extends React.Component {
     super(props)
     this.state = {
       mainImg: '',
-      Size: '',
-      Color: '',
-      Capacity: '',
-      'With USB 3 ports': '',
-      'Touch ID in keyboard': '',
       addedToCart: false,
     }
   }
@@ -67,25 +62,20 @@ class PDP extends React.Component {
     const newCartProduct = {
       product,
       id: Date.now(),
-      productID: product.id,
-      Size: this.state.Size,
-      Color: this.state.Color,
-      Capacity: this.state.Capacity,
-      'With USB 3 ports': this.state['With USB 3 ports'],
-      'Touch ID in keyboard': this.state['Touch ID in keyboard'],
       amount: 1,
+      ...this.state,
     }
 
     if (
       cartProducts.length === 0 ||
-      !cartProducts.find((i) => i.productID === product.id)
+      !cartProducts.find((i) => i.product.id === product.id)
     ) {
       cartProducts.push(newCartProduct)
       setCartProducts(cartProducts)
       return true
     } else {
       let matchedProducts = cartProducts.filter(
-        (i) => i.productID === product.id
+        (i) => i.product.id === product.id
       )
       outer: for (let i = 0; i < matchedProducts.length; i++) {
         for (let j = 0; j < product.attributes.length; j++) {
@@ -124,7 +114,7 @@ class PDP extends React.Component {
     if (!data.product) {
       return (
         <Wrapper>
-          <h2>{`There is no product with id of ${this.props.params.productID}`}</h2>
+          <h2>{`There is no product with id of ${this.props.params.product.id}`}</h2>
         </Wrapper>
       )
     }
@@ -288,7 +278,7 @@ const Wrapper = styled.div`
   .img {
     width: 79px;
     height: 80px;
-    object-fit: cover;
+    object-fit: contain;
     cursor: pointer;
   }
 
